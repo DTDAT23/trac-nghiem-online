@@ -12,6 +12,7 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            padding-right: 180px; /* Chừa khoảng trống bên phải cho menu */
         }
         h1 {
             text-align: center;
@@ -47,22 +48,50 @@
         }
         input[type="radio"] {
             margin-right: 10px;
+            transform: scale(1.2);
         }
-        #submit-btn {
-            display: block;
-            width: 100%;
+
+        /* --- MENU ĐIỀU KHIỂN NỔI BÊN PHẢI --- */
+        .btn-group {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            width: 150px;
+            background: white;
             padding: 15px;
-            background-color: #27ae60;
-            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            border: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        button {
+            padding: 12px 10px;
             border: none;
             border-radius: 5px;
-            font-size: 1.2em;
+            font-size: 1em;
             cursor: pointer;
-            margin-top: 20px;
+            font-weight: bold;
+            width: 100%;
+            transition: transform 0.2s, background 0.3s;
         }
-        #submit-btn:hover {
-            background-color: #219150;
+        button:active { transform: scale(0.95); }
+
+        #submit-btn {
+            background-color: #27ae60;
+            color: white;
         }
+        #submit-btn:hover { background-color: #219150; }
+
+        #reset-btn {
+            background-color: #95a5a6;
+            color: white;
+        }
+        #reset-btn:hover { background-color: #7f8c8d; }
+
         #result-area {
             margin-top: 20px;
             padding: 20px;
@@ -74,6 +103,7 @@
             font-weight: bold;
             display: none;
         }
+
         /* Styles cho kết quả đúng/sai */
         .correct-answer {
             background-color: #d4edda !important;
@@ -85,28 +115,42 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        .note-correct {
-            font-weight: bold;
-            color: #27ae60;
-            margin-left: 10px;
+
+        /* Responsive: Trên điện thoại sẽ đưa menu xuống dưới */
+        @media (max-width: 1100px) {
+            body { padding-right: 20px; }
+            .btn-group {
+                position: static;
+                width: auto;
+                flex-direction: row;
+                justify-content: center;
+                box-shadow: none;
+                border: none;
+                margin-top: 20px;
+            }
+            .btn-group h3 { display: none; }
         }
     </style>
 </head>
 <body>
 
     <h1>Đề Ôn Tập: Bản Quyền & Mã Nguồn Mở</h1>
+    
     <a href="index.html" style="display: inline-block; margin-bottom: 15px; padding: 10px 15px; background: #ecf0f1; color: #2c3e50; text-decoration: none; border-radius: 5px; font-weight: bold; border: 1px solid #bdc3c7;">⬅️ Quay về Trang chủ</a>
-    <div class="quiz-container">
-        <div id="quiz-content">
-            </div>
 
-        <button id="submit-btn" onclick="submitQuiz()">Nộp bài</button>
+    <div class="quiz-container">
+        <div id="quiz-content">Loading...</div>
         <div id="result-area"></div>
     </div>
 
+    <div class="btn-group">
+        <h3 style="margin: 0 0 10px 0; font-size: 1em; text-align: center; color: #7f8c8d; border-bottom: 2px solid #eee; padding-bottom: 5px;">Bảng điều khiển</h3>
+        <button id="submit-btn" onclick="submitQuiz()">Nộp bài</button>
+        <button id="reset-btn" onclick="location.reload()">Làm lại</button>
+    </div>
+
     <script>
-        // Dữ liệu câu hỏi và đáp án từ file bạn cung cấp
-        // Đáp án dựa trên bảng đáp án ở cuối tài liệu [cite: 254]
+        // Dữ liệu 50 câu hỏi
         const quizData = [
             { id: 1, q: "1. Bản quyền phần mềm được hiểu là gì?", a: "d", options: { a: "Quyền được phép sử dụng phần mềm miễn phí.", b: "Quyền được phép sao chép phần mềm.", c: "Quyền được phép sửa đổi phần mềm.", d: "Quyền mà cá nhân/tổ chức có quyền sử dụng phần mềm hợp pháp." } },
             { id: 2, q: "2. Luật Sở hữu Trí tuệ Việt Nam ban hành năm nào?", a: "b", options: { a: "2000", b: "2005", c: "2010", d: "2015" } },
@@ -163,26 +207,19 @@
         function renderQuiz() {
             const quizContainer = document.getElementById('quiz-content');
             let html = '';
-
-            // Mảng chữ cái cố định để hiển thị đẹp mắt
+            
+            // Các nhãn cố định
             const fixedLabels = ['A', 'B', 'C', 'D'];
 
             quizData.forEach((item, index) => {
-                let imageBlock = '';
-                if (item.image) {
-                    imageBlock = `<img src="${item.image}" class="question-image" alt="Hình minh họa câu ${item.id}">`;
-                }
-
                 // 1. Lấy danh sách key (a, b, c, d)
                 let optionKeys = Object.keys(item.options);
                 
-                // 2. Trộn ngẫu nhiên vị trí các key
+                // 2. Trộn ngẫu nhiên
                 optionKeys.sort(() => Math.random() - 0.5);
 
                 // 3. Tạo HTML
                 let optionsHtml = optionKeys.map((key, i) => {
-                    // key: là mã đáp án gốc (a, b, c, d) - dùng để chấm điểm
-                    // i: là số thứ tự hiển thị (0, 1, 2, 3) - dùng để gán nhãn A, B, C, D cố định
                     return `
                         <label id="lbl-${index}-${key}" style="display: flex; align-items: center;">
                             <input type="radio" name="q${index}" value="${key}" style="margin-right: 10px;"> 
@@ -194,7 +231,6 @@
                 html += `
                     <div class="question-item" id="question-${index}">
                         <div class="question-title">Câu ${item.id}: ${item.q.replace(/^\d+\.\s/, '')}</div>
-                        ${imageBlock}
                         <div class="options" style="display: flex; flex-direction: column; gap: 10px;">
                             ${optionsHtml}
                         </div>
@@ -207,47 +243,51 @@
 
         function submitQuiz() {
             let score = 0;
+            let unswered = 0;
             
             quizData.forEach((item, index) => {
-                // Lấy đáp án người dùng chọn
                 const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
-                const questionBlock = document.getElementById(`question-${index}`);
                 
-                // Lấy label của đáp án đúng để tô màu xanh
-                const correctLabel = document.getElementById(`lbl-${index}-${item.a}`);
-                
-                // Reset style cũ (nếu nộp lại)
+                // Reset style cũ
                 ['a','b','c','d'].forEach(opt => {
-                    document.getElementById(`lbl-${index}-${opt}`).classList.remove('correct-answer', 'wrong-answer');
+                    const el = document.getElementById(`lbl-${index}-${opt}`);
+                    if(el) el.classList.remove('correct-answer', 'wrong-answer');
                 });
 
                 // Luôn hiển thị đáp án đúng
-                correctLabel.classList.add('correct-answer');
+                const correctLabel = document.getElementById(`lbl-${index}-${item.a}`);
+                if (correctLabel) correctLabel.classList.add('correct-answer');
                 
                 // Kiểm tra đáp án
                 if (selectedOption) {
                     if (selectedOption.value === item.a) {
                         score++;
                     } else {
-                        // Nếu chọn sai, tô màu đỏ vào lựa chọn đó
                         const wrongLabel = document.getElementById(`lbl-${index}-${selectedOption.value}`);
                         wrongLabel.classList.add('wrong-answer');
                     }
+                } else {
+                    unswered++;
                 }
             });
 
             // Hiển thị kết quả
             const resultArea = document.getElementById('result-area');
             resultArea.style.display = 'block';
-            resultArea.innerHTML = `Kết quả: ${score} / ${quizData.length} câu đúng (${Math.round(score/quizData.length*100)}%)`;
+            resultArea.innerHTML = `
+                Kết quả: <span style="color: #27ae60">${score}</span> / ${quizData.length} câu đúng.<br>
+                <span style="font-size: 0.8em; color: #7f8c8d">(Bỏ trống: ${unswered} câu)</span>
+            `;
             
-            // Cuộn xuống xem kết quả
+            // Cuộn xuống phần kết quả ở dưới cùng
             resultArea.scrollIntoView({ behavior: 'smooth' });
+            
+            // Thông báo ngắn gọn
+            alert(`Bạn đã làm đúng ${score}/${quizData.length} câu!`);
         }
 
         // Khởi chạy khi load trang
         window.onload = renderQuiz;
     </script>
 </body>
-
 </html>
