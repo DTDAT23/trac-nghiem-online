@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn tập Bản quyền & Mã nguồn mở</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .quiz-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .question-item {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #2980b9;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .options label:hover {
+            background-color: #f0f8ff;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        #submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        #submit-btn:hover {
+            background-color: #219150;
+        }
+        #result-area {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #e8f6f3;
+            border: 1px solid #a2d9ce;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: none;
+        }
+        /* Styles cho kết quả đúng/sai */
+        .correct-answer {
+            background-color: #d4edda !important;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .note-correct {
+            font-weight: bold;
+            color: #27ae60;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Đề Ôn Tập: Bản Quyền & Mã Nguồn Mở</h1>
+    <a href="index.html" style="display: inline-block; margin-bottom: 15px; padding: 10px 15px; background: #ecf0f1; color: #2c3e50; text-decoration: none; border-radius: 5px; font-weight: bold; border: 1px solid #bdc3c7;">⬅️ Quay về Trang chủ</a>
+    <div class="quiz-container">
+        <div id="quiz-content">
+            </div>
+
+        <button id="submit-btn" onclick="submitQuiz()">Nộp bài</button>
+        <div id="result-area"></div>
+    </div>
+
+    <script>
+        // Dữ liệu câu hỏi và đáp án từ file bạn cung cấp
+        // Đáp án dựa trên bảng đáp án ở cuối tài liệu [cite: 254]
+        const quizData = [
+            { id: 1, q: "1. Bản quyền phần mềm được hiểu là gì?", a: "d", options: { a: "Quyền được phép sử dụng phần mềm miễn phí.", b: "Quyền được phép sao chép phần mềm.", c: "Quyền được phép sửa đổi phần mềm.", d: "Quyền mà cá nhân/tổ chức có quyền sử dụng phần mềm hợp pháp." } },
+            { id: 2, q: "2. Luật Sở hữu Trí tuệ Việt Nam ban hành năm nào?", a: "b", options: { a: "2000", b: "2005", c: "2010", d: "2015" } },
+            { id: 3, q: "3. Giấy phép phần mềm là gì?", a: "b", options: { a: "Hợp đồng dùng miễn phí.", b: "Thỏa thuận pháp lý giữa chủ sở hữu và người dùng.", c: "Bản quyền cho sửa mã.", d: "Giấy phép thương mại." } },
+            { id: 4, q: "4. Đâu KHÔNG phải tầm quan trọng của bản quyền phần mềm?", a: "c", options: { a: "Không vi phạm pháp luật.", b: "Tạo điều kiện phát triển.", c: "Được sửa và phân phối lại.", d: "Tiếp cận phần mềm đầy đủ." } },
+            { id: 5, q: "5. Bản quyền cho phép dùng không thời hạn?", a: "b", options: { a: "Subscription", b: "Perpetual", c: "Shareware", d: "Freeware" } },
+            { id: 6, q: "6. Phần mềm OEM là gì?", a: "b", options: { a: "Bán riêng lẻ.", b: "Kèm theo thiết bị.", c: "Do đại học phát triển.", d: "Miễn phí cho SV." } },
+            { id: 7, q: "7. Đặc điểm FOSS?", a: "a", options: { a: "Miễn phí và cho sửa.", b: "Có phí, không cho sửa.", c: "Dùng thử.", d: "Chỉ giáo dục." } },
+            { id: 8, q: "8. Người khởi xướng phần mềm tự do 1983?", a: "a", options: { a: "Richard Stallman", b: "Bill Gates", c: "Linus Torvalds", d: "Steve Jobs" } },
+            { id: 9, q: "9. Một tiêu chí OSI?", a: "a", options: { a: "Tự do phân phối lại.", b: "Giới hạn người dùng.", c: "Thu phí bản quyền.", d: "Cấm sửa mã." } },
+            { id: 10, q: "10. OSI thành lập năm nào?", a: "c", options: { a: "1983", b: "1985", c: "1998", d: "2004" } },
+            { id: 11, q: "11. HĐH mã nguồn mở là gì?", a: "b", options: { a: "Miễn phí.", b: "Cho phép can thiệp mã nguồn.", c: "Chỉ cho lập trình viên.", d: "Không bản quyền." } },
+            { id: 12, q: "12. Ưu điểm HĐH mã nguồn mở?", a: "a", options: { a: "Chi phí thấp.", b: "Ít phần mềm.", c: "Giao diện phức tạp.", d: "Hỗ trợ kém." } },
+            { id: 13, q: "13. MULTICS phát triển thập niên nào?", a: "b", options: { a: "1950", b: "1960", c: "1970", d: "1980" } },
+            { id: 14, q: "14. UNIX viết bằng ngôn ngữ nào?", a: "b", options: { a: "Assembly", b: "C", c: "Java", d: "Python" } },
+            { id: 15, q: "15. Ai tạo ra Linux?", a: "a", options: { a: "Linus Torvalds", b: "Richard Stallman", c: "Ken Thompson", d: "Dennis Ritchie" } },
+            { id: 16, q: "16. Bản phân phối Linux là gì?", a: "a", options: { a: "HĐH Linux hoàn chỉnh.", b: "Nhân Linux.", c: "Ứng dụng.", d: "Giấy phép." } },
+            { id: 17, q: "17. Ubuntu dựa trên?", a: "b", options: { a: "Red Hat", b: "Debian", c: "Fedora", d: "CentOS" } },
+            { id: 18, q: "18. BIOS là viết tắt của?", a: "a", options: { a: "Basic Input/Output System", b: "Bootstrap Initialization System", c: "Binary Input/Output Software", d: "Basic Installation Operating System" } },
+            { id: 19, q: "19. MBR chứa thông tin gì?", a: "a", options: { a: "Chỉ dẫn khởi động (boot loader)", b: "Dữ liệu HĐH", c: "File hệ thống", d: "Thông tin người dùng" } },
+            { id: 20, q: "20. File system Linux theo tiêu chuẩn?", a: "a", options: { a: "FHS", b: "MBR", c: "GPT", d: "BIOS" } },
+            { id: 21, q: "21. Hai nhóm giấy phép OSS chính?", a: "a", options: { a: "Permissive & Copyleft", b: "Proprietary & Free", c: "Commercial & Non-commercial", d: "Open & Closed" } },
+            { id: 22, q: "22. Giấy phép cho phép kết hợp mã độc quyền?", a: "b", options: { a: "Copyleft", b: "Permissive", c: "Proprietary", d: "Free" } },
+            { id: 23, q: "23. Ví dụ giấy phép copyleft?", a: "a", options: { a: "GPL", b: "Apache", c: "MIT", d: "BSD" } },
+            { id: 24, q: "24. Giấy phép cho phép độc quyền SP phái sinh?", a: "a", options: { a: "Permissive", b: "Copyleft", c: "Proprietary", d: "Free" } },
+            { id: 25, q: "25. Ví dụ giấy phép Permissive?", a: "a", options: { a: "MIT", b: "GPL", c: "LGPL", d: "EPL" } },
+            { id: 26, q: "26. 10 tiêu chí OSI dùng để?", a: "a", options: { a: "Định nghĩa chuẩn OSS", b: "Bảo vệ phần mềm độc quyền", c: "Kiểm soát thương mại", d: "Giới hạn truy cập" } },
+            { id: 27, q: "27. Tiêu chí yêu cầu phân phối kèm mã nguồn?", a: "a", options: { a: "Source Code", b: "Free Redistribution", c: "No Discrimination", d: "No Field Restriction" } },
+            { id: 28, q: "28. Tiêu chí cho phép sửa đổi?", a: "a", options: { a: "Derived Works", b: "Free Redistribution", c: "Source Code", d: "Integrity" } },
+            { id: 29, q: "29. HĐH OSS cho IoT?", a: "c", options: { a: "Android", b: "FreeRTOS", c: "Contiki", d: "RIOT" } },
+            { id: 30, q: "30. HĐH OSS cho smartphone?", a: "a", options: { a: "Android", b: "Tizen", c: "KaiOS", d: "Sailfish" } },
+            { id: 31, q: "31. Dự án MULTICS do?", a: "a", options: { a: "GE & AT&T Bell (MIT)", b: "Microsoft & Apple", c: "IBM & Sun", d: "Google & Amazon" } },
+            { id: 32, q: "32. HĐH phát triển từ MULTICS?", a: "a", options: { a: "UNIX", b: "Linux", c: "Windows", d: "macOS" } },
+            { id: 33, q: "33. AT&T cấp phép UNIX năm?", a: "c", options: { a: "1960", b: "1970", c: "1980", d: "1990" } },
+            { id: 34, q: "34. UNIX chuyển sang C giai đoạn?", a: "c", options: { a: "1960–65", b: "1965–70", c: "1970–75", d: "1975–80" } },
+            { id: 35, q: "35. Mục đích ban đầu MULTICS?", a: "b", options: { a: "Điện – điện thoại", b: "Nghiên cứu khoa học", c: "PC", d: "Cạnh tranh Windows" } },
+            { id: 36, q: "36. Hai phiên bản UNIX?", a: "a", options: { a: "System V & BSD", b: "Red Hat & Debian", c: "Fedora & CentOS", d: "Ubuntu & Mint" } },
+            { id: 37, q: "37. Linux bắt đầu năm?", a: "c", options: { a: "1983", b: "1989", c: "1991", d: "1998" } },
+            { id: 38, q: "38. Kernel Linux 0.01 phát hành?", a: "a", options: { a: "1991", b: "1992", c: "1993", d: "1994" } },
+            { id: 39, q: "39. Kernel Linux khá ổn định?", a: "c", options: { a: "0.01", b: "0.10", c: "1.0", d: "2.0" } },
+            { id: 40, q: "40. Ưu điểm Linux?", a: "a", options: { a: "Tương thích cao", b: "Hỗ trợ tốt", c: "Giao diện đẹp", d: "Nhiều game" } },
+            { id: 41, q: "41. Nhược điểm Linux?", a: "c", options: { a: "Khó dùng", b: "Cấu hình cao", c: "Ít phần mềm", d: "Không an toàn" } },
+            { id: 42, q: "42. Linux dùng kernel?", a: "b", options: { a: "Micro", b: "Monolithic", c: "Hybrid", d: "Exo" } },
+            { id: 43, q: "43. Ưu điểm Monolithic kernel?", a: "a", options: { a: "Hiệu năng tốt", b: "Nhỏ gọn", c: "Dễ bảo trì", d: "Mở rộng cao" } },
+            { id: 44, q: "44. GNOME là viết tắt của?", a: "a", options: { a: "GNU Network Object Model Environment", b: "Graphical Network OS Mgmt Env", c: "General Network Object Model Ext", d: "Global Network Object Mgmt Engine" } },
+            { id: 45, q: "45. Ubuntu do công ty nào phát triển?", a: "b", options: { a: "Red Hat", b: "Canonical", c: "Microsoft", d: "Apple" } },
+            { id: 46, q: "46. Ubuntu đầu tiên phát hành năm?", a: "c", options: { a: "2000", b: "2002", c: "2004", d: "2006" } },
+            { id: 47, q: "47. Ubuntu LTS phát hành mỗi?", a: "b", options: { a: "1 năm", b: "2 năm", c: "3 năm", d: "4 năm" } },
+            { id: 48, q: "48. Office tích hợp sẵn Ubuntu?", a: "b", options: { a: "MS Office", b: "LibreOffice", c: "OpenOffice", d: "Google Docs" } },
+            { id: 49, q: "49. MBR giới hạn dung lượng?", a: "b", options: { a: "1 TB", b: "2 TB", c: "4 TB", d: "8 TB" } },
+            { id: 50, q: "50. GPT là viết tắt của?", a: "b", options: { a: "Global Partition Table", b: "GUID Partition Table", c: "General Partition Technology", d: "Graphical Partitioning Tool" } }
+        ];
+
+        function renderQuiz() {
+            const quizContainer = document.getElementById('quiz-content');
+            let html = '';
+
+            quizData.forEach((item, index) => {
+                html += `
+                    <div class="question-item" id="question-${index}">
+                        <div class="question-title">${item.q}</div>
+                        <div class="options">
+                            <label id="lbl-${index}-a">
+                                <input type="radio" name="q${index}" value="a"> A. ${item.options.a}
+                            </label>
+                            <label id="lbl-${index}-b">
+                                <input type="radio" name="q${index}" value="b"> B. ${item.options.b}
+                            </label>
+                            <label id="lbl-${index}-c">
+                                <input type="radio" name="q${index}" value="c"> C. ${item.options.c}
+                            </label>
+                            <label id="lbl-${index}-d">
+                                <input type="radio" name="q${index}" value="d"> D. ${item.options.d}
+                            </label>
+                        </div>
+                    </div>
+                `;
+            });
+
+            quizContainer.innerHTML = html;
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            
+            quizData.forEach((item, index) => {
+                // Lấy đáp án người dùng chọn
+                const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+                const questionBlock = document.getElementById(`question-${index}`);
+                
+                // Lấy label của đáp án đúng để tô màu xanh
+                const correctLabel = document.getElementById(`lbl-${index}-${item.a}`);
+                
+                // Reset style cũ (nếu nộp lại)
+                ['a','b','c','d'].forEach(opt => {
+                    document.getElementById(`lbl-${index}-${opt}`).classList.remove('correct-answer', 'wrong-answer');
+                });
+
+                // Luôn hiển thị đáp án đúng
+                correctLabel.classList.add('correct-answer');
+                
+                // Kiểm tra đáp án
+                if (selectedOption) {
+                    if (selectedOption.value === item.a) {
+                        score++;
+                    } else {
+                        // Nếu chọn sai, tô màu đỏ vào lựa chọn đó
+                        const wrongLabel = document.getElementById(`lbl-${index}-${selectedOption.value}`);
+                        wrongLabel.classList.add('wrong-answer');
+                    }
+                }
+            });
+
+            // Hiển thị kết quả
+            const resultArea = document.getElementById('result-area');
+            resultArea.style.display = 'block';
+            resultArea.innerHTML = `Kết quả: ${score} / ${quizData.length} câu đúng (${Math.round(score/quizData.length*100)}%)`;
+            
+            // Cuộn xuống xem kết quả
+            resultArea.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Khởi chạy khi load trang
+        window.onload = renderQuiz;
+    </script>
+</body>
+</html>
