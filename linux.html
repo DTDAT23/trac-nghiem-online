@@ -284,27 +284,39 @@
             const quizContainer = document.getElementById('quiz-content');
             let html = '';
 
+            // Mảng chữ cái cố định để hiển thị đẹp mắt
+            const fixedLabels = ['A', 'B', 'C', 'D'];
+
             quizData.forEach((item, index) => {
                 let imageBlock = '';
-                // Nếu có ảnh thì hiển thị ảnh
                 if (item.image) {
                     imageBlock = `<img src="${item.image}" class="question-image" alt="Hình minh họa câu ${item.id}">`;
-                } else if (item.id === 120 && !item.image) {
-                    // Fallback nếu người dùng copy code cũ
-                    imageBlock = '';
                 }
+
+                // 1. Lấy danh sách key (a, b, c, d)
+                let optionKeys = Object.keys(item.options);
+                
+                // 2. Trộn ngẫu nhiên vị trí các key
+                optionKeys.sort(() => Math.random() - 0.5);
+
+                // 3. Tạo HTML
+                let optionsHtml = optionKeys.map((key, i) => {
+                    // key: là mã đáp án gốc (a, b, c, d) - dùng để chấm điểm
+                    // i: là số thứ tự hiển thị (0, 1, 2, 3) - dùng để gán nhãn A, B, C, D cố định
+                    return `
+                        <label id="lbl-${index}-${key}" style="display: flex; align-items: center;">
+                            <input type="radio" name="q${index}" value="${key}" style="margin-right: 10px;"> 
+                            <span><strong>${fixedLabels[i]}.</strong> ${item.options[key]}</span>
+                        </label>
+                    `;
+                }).join('');
 
                 html += `
                     <div class="question-item" id="question-${index}">
                         <div class="question-title">Câu ${item.id}: ${item.q.replace(/^\d+\.\s/, '')}</div>
                         ${imageBlock}
-                        <div class="options">
-                            ${Object.keys(item.options).map(key => `
-                                <label id="lbl-${index}-${key}">
-                                    <input type="radio" name="q${index}" value="${key}"> 
-                                    <strong>${key.toUpperCase()}.</strong> ${item.options[key]}
-                                </label>
-                            `).join('')}
+                        <div class="options" style="display: flex; flex-direction: column; gap: 10px;">
+                            ${optionsHtml}
                         </div>
                     </div>
                 `;
@@ -355,4 +367,5 @@
         window.onload = renderQuiz;
     </script>
 </body>
+
 </html>
