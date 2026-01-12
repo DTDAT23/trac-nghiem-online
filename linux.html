@@ -1,415 +1,165 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ôn tập Trắc nghiệm Linux (120 Câu)</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            padding-right: 180px; /* Chừa chỗ cho menu bên phải */
-        }
-        h1 {
-            text-align: center;
-            color: #d35400;
-            margin-bottom: 30px;
-        }
-        .info-box {
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 5px solid #d35400;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .quiz-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .question-item {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px dashed #ccc;
-        }
-        .question-title {
-            font-weight: 600;
-            font-size: 1.1em;
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-        .question-image {
-            display: block;
-            max-width: 100%;
-            height: auto;
-            margin: 10px 0 20px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .options {
-            display: grid;
-            gap: 10px;
-        }
-        .options label {
-            display: block;
-            cursor: pointer;
-            padding: 10px 15px;
-            border-radius: 6px;
-            border: 1px solid #e0e0e0;
-            transition: all 0.2s;
-            background-color: #fafafa;
-        }
-        .options label:hover {
-            background-color: #eef2f3;
-            border-color: #bdc3c7;
-        }
-        input[type="radio"] {
-            margin-right: 10px;
-            transform: scale(1.2);
-        }
-        
-        /* --- MENU ĐIỀU KHIỂN --- */
-        .btn-group {
-            position: fixed;
-            top: 100px;
-            right: 30px;
-            width: 150px;
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            border: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 1000;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ôn tập Trắc nghiệm Linux (120 Câu)</title>
 
-        button {
-            padding: 12px 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-            transition: transform 0.2s, background 0.3s;
-        }
-        button:active { transform: scale(0.95); }
-        #submit-btn {
-            background-color: #27ae60;
-            color: white;
-        }
-        #submit-btn:hover { background-color: #219150; }
-        #reset-btn {
-            background-color: #95a5a6;
-            color: white;
-        }
-        #reset-btn:hover { background-color: #7f8c8d; }
+<style>
+body{
+    font-family: Segoe UI, Tahoma, sans-serif;
+    background:#f0f2f5;
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+    padding-right:180px;
+}
+h1{color:#d35400;text-align:center}
+.quiz-container{
+    background:#fff;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 4px 15px rgba(0,0,0,.1)
+}
+.question-item{
+    margin-bottom:30px;
+    padding-bottom:20px;
+    border-bottom:1px dashed #ccc
+}
+.question-title{font-weight:600;margin-bottom:10px}
+.options label{
+    display:block;
+    padding:10px;
+    margin:5px 0;
+    border:1px solid #ddd;
+    border-radius:6px;
+    cursor:pointer
+}
+.options label:hover{background:#eef2f3}
+.correct-answer{background:#d4edda!important}
+.wrong-answer{background:#f8d7da!important}
 
-        #result-area {
-            margin-top: 20px;
-            padding: 20px;
-            text-align: center;
-            font-size: 1.3em;
-            font-weight: bold;
-            display: none;
-            border-radius: 8px;
-        }
-        .correct-answer {
-            background-color: #d4edda !important;
-            color: #155724;
-            border: 1px solid #c3e6cb !important;
-        }
-        .wrong-answer {
-            background-color: #f8d7da !important;
-            color: #721c24;
-            border: 1px solid #f5c6cb !important;
-        }
-        
-        @media (max-width: 1100px) {
-            body { padding-right: 20px; }
-            .btn-group {
-                position: static;
-                width: auto;
-                flex-direction: row;
-                justify-content: center;
-                box-shadow: none;
-                border: none;
-                margin-top: 20px;
-            }
-            .btn-group h3 { display: none; }
-        }
-    </style>
+.btn-group{
+    position:fixed;
+    right:30px;
+    top:120px;
+    width:150px;
+    background:#fff;
+    padding:15px;
+    border-radius:8px;
+    box-shadow:0 4px 20px rgba(0,0,0,.2)
+}
+button{
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    border:none;
+    border-radius:5px;
+    font-weight:bold;
+    cursor:pointer
+}
+#submit-btn{background:#27ae60;color:#fff}
+#reset-btn{background:#7f8c8d;color:#fff}
+#result-area{
+    margin-top:20px;
+    padding:20px;
+    font-weight:bold;
+    display:none;
+    text-align:center
+}
+img{max-width:100%;margin:10px 0}
+@media(max-width:1100px){
+    body{padding-right:20px}
+    .btn-group{position:static;width:auto}
+}
+</style>
 </head>
+
 <body>
-    <a href="index.html" style="display: inline-block; margin-bottom: 15px; padding: 10px 15px; background: #fff; color: #d35400; text-decoration: none; border-radius: 5px; font-weight: bold; border: 1px solid #e67e22;">⬅️ Quay về Trang chủ</a>
 
-    <h1>Ôn Tập Hệ Điều Hành Linux</h1>
-    
-    <div class="info-box">
-        <p><strong>Lưu ý:</strong> Câu 120 yêu cầu file ảnh <code>cau120.png</code> nằm cùng thư mục.</p>
-    </div>
+<h1>Ôn Tập Hệ Điều Hành Linux</h1>
 
-    <div class="quiz-container">
-        <div id="quiz-content">Loading...</div>
-        <div id="result-area"></div>
-    </div>
+<div class="quiz-container">
+    <div id="quiz"></div>
+    <div id="result-area"></div>
+</div>
 
-    <div class="btn-group">
-        <h3 style="margin: 0 0 10px 0; font-size: 1em; text-align: center; color: #7f8c8d; border-bottom: 2px solid #eee; padding-bottom: 5px;">Bảng điều khiển</h3>
-        <button id="submit-btn" onclick="submitQuiz()">Nộp bài</button>
-        <button id="reset-btn" onclick="location.reload()">Làm lại</button>
-    </div>
+<div class="btn-group">
+    <button id="submit-btn" onclick="submitQuiz()">Nộp bài</button>
+    <button id="reset-btn" onclick="location.reload()">Làm lại</button>
+</div>
 
-    <script>
-        // Dữ liệu 120 câu hỏi
-        const quizData = [
-            { id: 1, q: "1. Phần quan trọng nhất của hệ điều hành Linux là:", a: "c", options: { a: "File System", b: "Services", c: "Kernel", d: "Shell" } },
-            // Câu 2: Đây là câu cần xử lý đặc biệt (Câu a và b đúng)
-            { id: 2, q: "2. Số phiên bản kernel của Linux (cũ) có gì đặc biệt?", a: "a", options: { a: "Số chẵn là phiên bản ổn định", b: "Số lẻ là phiên bản thử nghiệm", c: "Không quan trọng", d: "Câu a và b đúng" } },
-            { id: 3, q: "3. Khi cài RedHat Linux ở chế độ nào thì các partion DOS bị xoá hết?", a: "b", options: { a: "Workstation", b: "Server", c: "Workstation and Server", d: "Không cái nào đúng" } },
-            { id: 4, q: "4. Kiến trúc Kernel Linux là:", a: "d", options: { a: "Static", b: "Microkernel", c: "Distributed", d: "Monolithic" } },
-            { id: 5, q: "5. Tác giả của phiên bản hệ điều hành Linux đầu tiên là?", a: "b", options: { a: "Bill Gates", b: "Linus Torvalds", c: "Alan Turing", d: "Pascal" } },
-            { id: 6, q: "6. Để liệt kê các file có trong thư mục hiện hành ta dùng lệnh:", a: "a", options: { a: "lệnh ls", b: "lệnh df", c: "lệnh du", d: "lệnh cp" } },
-            { id: 7, q: "7. Để liệt kê đầy đủ thông tin của các file có trong thư mục hiện hành ta dùng lệnh ls với tham số:", a: "b", options: { a: "–a", b: "–l", c: "–x", d: "–n" } },
-            { id: 8, q: "8. Để liệt kê các file ẩn trong thư mục hiện hành ta dùng lệnh ls với tham số:", a: "b", options: { a: "–b", b: "–a", c: "–l", d: "–n" } },
-            { id: 9, q: "9. Để chuyển sang một thư mục khác ta dùng lệnh:", a: "b", options: { a: "Lệnh cdir", b: "Lệnh cd", c: "Lệnh mkdir", d: "Lệnh dir" } },
-            { id: 10, q: "10. User 'sinhvien' có home là /home/sinhvien. Để trở về home dir nhanh nhất, dùng lệnh:", a: "a", options: { a: "cd", b: "cd /home/sinhvien", c: "cd / ; cd home ; cd sinhvien", d: "cd /home/sinhvien" } },
-            { id: 11, q: "11. Để chép file /tmp/hello.txt vào thư mục /tmp/hello/ ta dùng lệnh:", a: "d", options: { a: "copy /tmp/hello.txt /tmp/hello/", b: "cp tmp/hello.txt /tmp/hello", c: "cp /tmp/hello /tmp/hello", d: "cp /tmp/hello.txt /tmp/hello" } },
-            { id: 12, q: "12. Để xem nội dung một tập tin văn bản trong Linux ta có thể dùng lệnh:", a: "d", options: { a: "cat", b: "less", c: "more", d: "Cả 3 lệnh trên" } },
-            { id: 13, q: "13. Để đọc nội dung một đĩa CD trong Linux ta phải làm thế nào?", a: "a", options: { a: "Phải mount trước", b: "eject cdrom", c: "cd /mnt/cdrom", d: "Không đọc được CD rom" } },
-            { id: 14, q: "14. Làm thế nào để đọc một đĩa mềm trong Linux?", a: "a", options: { a: "Mount /dev/fd0", b: "Mount /dev/cdrom", c: "Không cần làm gì cả", d: "Cd /mnt/floppy" } },
-            { id: 15, q: "15. Tập tin nào chứa các mount point mặc định khi hệ thống boot lên:", a: "c", options: { a: "/etc/mtab", b: "/etc/mount.conf", c: "/etc/fstab", d: "/etc/modules.conf" } },
-            { id: 16, q: "16. Tập tin nào chứa thông tin các file system đang được mount (hiện tại)?", a: "a", options: { a: "/etc/mtab", b: "/etc/mount.conf", c: "/etc/fstab", d: "/etc/modules.conf" } },
-            { id: 17, q: "17. Tập tin có thuộc tính -rwx--x--x tương ứng với số nào?", a: "d", options: { a: "077", b: "644", c: "755", d: "711" } },
-            { id: 18, q: "18. Thiết lập: Chủ sở hữu (đọc, ghi), nhóm (đọc, thực thi), other (đọc):", a: "b", options: { a: "chmod 665", b: "chmod 654", c: "chmod 653", d: "chmod 754" } },
-            { id: 19, q: "19. Tập tin có dấu chấm “.” phía trước (VD: .hello.txt) có đặc tính gì?", a: "a", options: { a: "Tập tin ẩn", b: "Thực thi", c: "Không thấy được với lệnh ls", d: "Tập tin hệ thống" } },
-            { id: 20, q: "20. Lệnh nào cho phép ta tạo một account user mới?", a: "d", options: { a: "Lệnh adduser", b: "Lệnh useradd", c: "lệnh passwd", d: "Câu a và b đúng" } },
-            { id: 21, q: "21. Sau khi đánh lệnh 'useradd sinhvien', user này đã login được chưa?", a: "b", options: { a: "Được", b: "Không (chưa có pass)", c: "Tùy hệ thống", d: "Được nếu là root" } },
-            { id: 22, q: "22. Tập tin /etc/passwd chứa thông tin gì?", a: "b", options: { a: "Chứa profile", b: "Chứa uid,gid, home directory, shell", c: "Chứa password", d: "Chứa tập shadow" } },
-            { id: 23, q: "23. Tập tin /etc/shadow chứa thông tin gì?", a: "c", options: { a: "Chứa profile", b: "Chứa uid,gid", c: "Chứa password (đã mã hóa)", d: "Chứa login name" } },
-            { id: 24, q: "24. Trong hệ thống Linux user nào có quyền cao nhất?", a: "b", options: { a: "User administrator", b: "User root", c: "User admin", d: "User có UID=1000" } },
-            { id: 25, q: "25. Hệ thống Linux có mấy Run Level chính?", a: "a", options: { a: "Có 7 Run Level (0-6)", b: "Có 6 Run Level", c: "Có 5 Run Level", d: "Có 4 Run Level" } },
-            { id: 26, q: "26. Run level nào là shutdown và halt hệ thống?", a: "b", options: { a: "Level 6", b: "Level 0", c: "Level 3", d: "Level 5" } },
-            { id: 27, q: "27. Run level nào là reboot hệ thống?", a: "a", options: { a: "Level 6", b: "Level 0", c: "Level 3", d: "Level 5" } },
-            { id: 28, q: "28. Run level nào làm hệ thống chạy full mode with X window (đồ họa)?", a: "d", options: { a: "Level 6", b: "Level 0", c: "Level 3", d: "Level 5" } },
-            { id: 29, q: "29. Ở run level nào hệ thống không đòi hỏi ta phải nhập username password?", a: "a", options: { a: "Level 1 (Single user)", b: "Level 3", c: "Level 5", d: "Không có" } },
-            { id: 30, q: "30. Chương trình soạn thảo văn bản nào là phổ biến nhất trong Linux (dòng lệnh)?", a: "a", options: { a: "vi", b: "Word", c: "Emacs", d: "Pico" } },
-            { id: 31, q: "31. Chương trình soạn thảo nào sau đây không sử dụng giao diện đồ hoạ?", a: "c", options: { a: "emacs (có gui)", b: "latex", c: "vi", d: "kword" } },
-            { id: 32, q: "32. Emacs là một chương trình:", a: "d", options: { a: "soạn thảo văn bản", b: "Công cụ lập trình", c: "Email client", d: "Tất cả các tính năng trên" } },
-            { id: 33, q: "33. Trong vi, để vào mode edit insert ta phải dùng lệnh nào?", a: "b", options: { a: "Dùng phím F4", b: "ESC-i (hoặc i)", c: "ESC-:q", d: "ESC-:x" } },
-            { id: 34, q: "34. Trong vi, để thoát KHÔNG lưu (không hỏi lại) ta dùng lệnh:", a: "a", options: { a: "ESC-:q!", b: "ESC-wq", c: "ESC-w!", d: "ESC-!" } },
-            { id: 35, q: "35. Để xem các tiến trình hiện có trong hệ thống Linux ta dùng lệnh:", a: "b", options: { a: "ls", b: "ps", c: "cs", d: "ds" } },
-            { id: 36, q: "36. Để xem chi tiết các tiến trình đang chạy (full format/all):", a: "d", options: { a: "–ef", b: "–ax", c: "–axf", d: "Cả 3 câu đều đúng" } },
-            { id: 37, q: "37. Mỗi tiến trình chạy trong hệ thống Linux được đặc trưng bởi:", a: "a", options: { a: "PID", b: "PUID", c: "PGUID", d: "GUID" } },
-            { id: 38, q: "38. Tham số PPID dùng để chỉ:", a: "b", options: { a: "Properly process ID", b: "Parent process ID", c: "Papa Process ID", d: "Không cái nào đúng" } },
-            { id: 39, q: "39. Để dừng (kết thúc) một tiến trình ta dùng lệnh:", a: "b", options: { a: "stop", b: "kill", c: "shutdown", d: "halt" } },
-            { id: 40, q: "40. Điều gì xảy ra với một tiến trình khi ta kill tiến trình cha của nó?", a: "b", options: { a: "Không ảnh hưởng", b: "Tiến trình con sẽ chết theo", c: "Đọc lại cấu hình", d: "Sinh tiến trình mới" } },
-            { id: 41, q: "41. Để kill hết các tiến trình có tên là vi ta dùng lệnh:", a: "d", options: { a: "kill –9 vi", b: "kill –HUP vi", c: "killall –HUP vi", d: "killall –9 vi" } },
-            { id: 42, q: "42. Để thiết lập địa chỉ IP cho một máy Linux ta sử dụng lệnh:", a: "b", options: { a: "ipconfig", b: "ifconfig", c: "netstat", d: "route" } },
-            { id: 43, q: "43. Để xem trạng thái các port đang mở của một máy Linux:", a: "c", options: { a: "ipconfig", b: "ifconfig", c: "netstat", d: "route" } },
-            { id: 44, q: "44. Để xem các thông tin về bảng routing:", a: "d", options: { a: "ifconfig", b: "netstat -nr", c: "route –n", d: "b và c đúng" } },
-            { id: 45, q: "45. Cú pháp ifconfig nào đúng?", a: "b", options: { a: "ifconfig eth0 IP/Mask", b: "ifconfig eth0 IP netmask MASK", c: "ifconfig eth0 IP mask MASK", d: "Sai hết" } },
-            { id: 46, q: "46. Để tạm thời stop một card mạng ta dùng lệnh:", a: "d", options: { a: "ifconfig eth0 up", b: "ifconfig eth0 stop", c: "ifconfig eth0 start", d: "ifconfig eth0 down" } },
-            { id: 47, q: "47. Thêm một đường dẫn (route) mới:", a: "a", options: { a: "route add –net ... netmask ... gw ...", b: "route add –net ... mask ...", c: "route add –net .../25", d: "Sai cú pháp" } },
-            { id: 48, q: "48. Khai báo default gateway 172.16.8.2:", a: "d", options: { a: "route add –net default gw ...", b: "route add –net 0.0.0.0 ...", c: "Sai", d: "Câu a và b đúng" } },
-            { id: 49, q: "49. Để xem tải (load/cpu/mem) của hệ thống Linux theo thời gian thực:", a: "a", options: { a: "Lệnh top", b: "Lệnh free", c: "Lệnh performance", d: "Không thể biết" } },
-            { id: 50, q: "50. Tập tin nào định nghĩa các port cho các dịch vụ:", a: "b", options: { a: "/etc/service", b: "/etc/services", c: "/etc/ports.conf", d: "/etc/httpd.conf" } },
-            { id: 51, q: "51. Dịch vụ SMTP chạy ở port nào?", a: "d", options: { a: "22", b: "23", c: "24", d: "25" } },
-            { id: 52, q: "52. Dịch vụ www (web) chạy ở port nào?", a: "b", options: { a: "53", b: "80", c: "110", d: "443" } },
-            { id: 53, q: "53. Dịch vụ nào cho phép ta truyền file qua mạng?", a: "b", options: { a: "http", b: "ftp", c: "uucp", d: "mc" } },
-            { id: 54, q: "54. Làm thế nào để login từ xa qua mạng vào một máy Linux?", a: "d", options: { a: "Dùng telnet", b: "Dùng ssh", c: "Dùng rlogin", d: "Cả 3 cách trên" } },
-            { id: 55, q: "55. Dịch vụ SSH trong Linux là gì?", a: "b", options: { a: "Secure Socket Shell", b: "Secure Shell", c: "Samba Shell", d: "Không là dịch vụ gì" } },
-            { id: 56, q: "56. Lệnh nào cài đặt gói rpm?", a: "b", options: { a: "rpm –evh", b: "rpm –ivh", c: "rpm –q", d: "rpm –qa" } },
-            { id: 57, q: "57. Để thay đổi các lựa chọn mount tự động, sửa file nào?", a: "b", options: { a: "/etc/filesystems", b: "/etc/fstab", c: "/etc/group", d: "/etc/mnttab" } },
-            { id: 58, q: "58. Trong Apache, để xây dựng “máy Web ảo”, dùng khối:", a: "c", options: { a: "Directory", b: "VirtualMachine", c: "VirtualHost", d: "Tất cả đều sai" } },
-            { id: 59, q: "59. Để thay đổi tên đăng nhập (login name), dùng lệnh:", a: "c", options: { a: "userchange", b: "passwd", c: "usermod –l new old", d: "usermode –m" } },
-            { id: 60, q: "60. Liệt kê file có ký tự cuối là “?”:", a: "c", options: { a: "ls *?", b: "ls*\?", c: "ls *[?]", d: "Tất cả đều sai" } },
-            { id: 61, q: "61. Tập tin chứa ánh xạ tên - IP cục bộ:", a: "b", options: { a: "/etc/host.conf", b: "/etc/hosts", c: "/etc/resolv.conf", d: "/etc/named.conf" } },
-            { id: 62, q: "62. Lệnh để người dùng thiết lập lịch crontab của riêng họ:", a: "d", options: { a: "vi ~/.crontab", b: "cp /etc/crontab", c: "crontab –v", d: "crontab –e" } },
-            { id: 63, q: "63. Để chép nội dung file1 vào CUỐI file2 (nối thêm):", a: "c", options: { a: "cat file1 file2", b: "more file1 2> file2", c: "cat file1 >> file2", d: "copy file1 >> file2" } },
-            { id: 64, q: "64. Lệnh nào biết đường dẫn thư mục hiện hành?", a: "a", options: { a: "pwd", b: "path", c: "echo path", d: "Không câu nào đúng" } },
-            { id: 65, q: "65. Phân giải ngược cho mạng 192.168.20.0, tên zone là:", a: "c", options: { a: "192.168.20.in-addr.arpa", b: "192.168.20.0.in-addr.arpa", c: "20.168.192.in-addr.arpa", d: "Tất cả đều đúng" } },
-            { id: 66, q: "66. Để hủy bỏ lệnh đang thi hành (break):", a: "a", options: { a: "Ctrl + C", b: "Ctrl + D", c: "Ctrl + Z", d: "Ctrl + S" } },
-            { id: 67, q: "67. Để xem nội dung tập tin văn bản:", a: "d", options: { a: "more", b: "less", c: "cat", d: "Tất cả đều đúng" } },
-            { id: 68, q: "68. Tạo tập tin “new” chứa nội dung của “data” và “odd”:", a: "c", options: { a: "cp data odd > new", b: "cp data odd >> new", c: "cat data odd > new", d: "Tất cả đều đúng" } },
-            { id: 69, q: "69. Lệnh nào SAI khi thao tác với thư mục /doc?", a: "b", options: { a: "ln –s /doc mydoc", b: "ln /doc mydoc (Hard link thư mục)", c: "rm –rf /doc", d: "cp –s /doc mydoc" } },
-            { id: 70, q: "70. Để xem hướng dẫn cách dùng lệnh ls:", a: "c", options: { a: "help ls", b: "list ls", c: "man ls", d: "doc ls" } },
-            { id: 71, q: "71. Lệnh xóa tập tin có tên là “-abc”:", a: "c", options: { a: "rm –f –abc", b: "rm –i –abc", c: "rm -- -abc", d: "rm \ -abc" } },
-            { id: 72, q: "72. Lệnh tạo thư mục cha nếu chưa tồn tại (mkdir -p):", a: "d", options: { a: "mkdir –parent ...", b: "mkdir /file /doc /priv", c: "mkdir /priv /doc /file", d: "mkdir –p /priv/doc/file" } },
-            { id: 73, q: "73. Trong vi, lệnh ghi và thoát?", a: "c", options: { a: "wq", b: "wq!", c: ":wq", d: ":qw" } },
-            { id: 74, q: "74. Tương đương với “chmod u+rwx,g=rx,o-rwx myfile”:", a: "c", options: { a: "027", b: "757", c: "750", d: "Không câu nào đúng" } },
-            { id: 75, q: "75. Chuyển về thư mục chủ (home) của người dùng hiện hành:", a: "b", options: { a: "pwd", b: "cd ~", c: "cd ..", d: "cd /home" } },
-            { id: 76, q: "76. Trong RedHat Linux, tên tài khoản người dùng:", a: "d", options: { a: "Là duy nhất", b: "Phân biệt hoa thường", c: "Không bắt đầu bằng số", d: "Tất cả đều đúng" } },
-            { id: 77, q: "77. Tập tin khai báo địa chỉ máy chủ DNS?", a: "b", options: { a: "/etc/named", b: "/etc/resolv.conf", c: "/etc/sysconfig/resolv.conf", d: "/etc/network" } },
-            { id: 78, q: "78. Lệnh tương đương “chown sales myfile” (nếu sales là group):", a: "c", options: { a: "chown sales:sales", b: "chgroup sales:sales", c: "chgrp sales myfile", d: "chmod sales" } },
-            { id: 79, q: "79. Tập tin /etc/sysconfig/network chứa thông tin:", a: "a", options: { a: "Tên máy và gateway", b: "Các thiết bị mạng", c: "Script PPP", d: "Trạng thái mạng" } },
-            { id: 80, q: "80. Để khóa tài khoản “user”:", a: "d", options: { a: "usermod –L user", b: "passwd –l user", c: "A và B đều sai", d: "A và B đều đúng" } },
-            { id: 81, q: "81. Tiến trình init:", a: "d", options: { a: "Luôn có PID = 1", b: "Không thể kết thúc", c: "Gọi khởi động khác", d: "Tất cả đều đúng" } },
-            { id: 82, q: "82. Tập tin cấu hình runlevel mặc định:", a: "c", options: { a: "/etc/grub.conf", b: "/etc/runlevel", c: "/etc/inittab", d: "/etc/init.conf" } },
-            { id: 83, q: "83. Trong vi, để chuyển về chế độ lệnh (command mode):", a: "a", options: { a: "ESC", b: "INS", c: "Ctrl + Shift", d: "Tất cả đều sai" } },
-            { id: 84, q: "84. Có thể tạo Symbolic Link tới tập tin không tồn tại không?", a: "a", options: { a: "Có", b: "Không", c: "Tùy trường hợp", d: "Sai" } },
-            { id: 85, q: "85. Tập tin script chứa khai báo định tuyến tĩnh:", a: "c", options: { a: "/etc/sysconfig/network", b: "/etc/sysconfig/route", c: "/etc/sysconfig/static-routes", d: "routes" } },
-            { id: 86, q: "86. Khi tạo user, thông tin nào BẮT BUỘC?", a: "b", options: { a: "Tên đầy đủ", b: "Tên đăng nhập (username)", c: "UID", d: "Shell" } },
-            { id: 87, q: "87. Xem crond chạy ở runlevel nào:", a: "c", options: { a: "chkconfig -list -crond", b: "chkconfig -l crond", c: "chkconfig --list crond", d: "chkconfig crond" } },
-            { id: 88, q: "88. /xyz là symlink của /tmp/dir. Lệnh vào /tmp/dir:", a: "c", options: { a: "cd –L /xyz", b: "cd –P /xyz", c: "cd /xyz", d: "Tất cả đều sai" } },
-            { id: 89, q: "89. Bật IP Forward ngay lập tức:", a: "b", options: { a: "Sửa sysctl.conf", b: "echo 1 > /proc/sys/net/ipv4/ip_forward", c: "echo 1 > net.ipv4...", d: "Chạy file proc" } },
-            { id: 90, q: "90. Crontab: 10 5 * * * /bin/foo nghĩa là:", a: "c", options: { a: "10:05 sáng", b: "Ngày 10 tháng 5", c: "05:10 sáng mỗi ngày", d: "Không câu nào đúng" } },
-            { id: 91, q: "91. Xem thông tin phân chia đĩa cứng:", a: "d", options: { a: "fdisk /dev/had", b: "fdisk /dev/sc", c: "list", d: "fdisk –l" } },
-            { id: 92, q: "92. Kiểm tra dung lượng đĩa còn trống:", a: "c", options: { a: "du –a", b: "df –a", c: "df", d: "du" } },
-            { id: 93, q: "93. Lệnh kill PID=1 (init) - (về lý thuyết lệnh):", a: "b", options: { a: "kill –15 1", b: "kill –9 1", c: "kill –p 1", d: "Không có lệnh" } },
-            { id: 94, q: "94. Thư mục /dev chứa:", a: "d", options: { a: "File phát triển", b: "File rác", c: "Trạng thái hệ thống", d: "Các tập tin đại diện thiết bị" } },
-            { id: 95, q: "95. Tạo IP alias (IP phụ) cho eth0:", a: "c", options: { a: "alias eth0...", b: "ifconfig eth1:0...", c: "ifconfig eth0:0 192.168.10.5", d: "if-cfg eth0:0" } },
-            { id: 96, q: "96. Trong zone file, bản ghi SOA:", a: "a", options: { a: "Bắt buộc phải có", b: "Tùy ý", c: "Khai báo nhiều lần", d: "Đúng hết" } },
-            { id: 97, q: "97. Sao chép đệ quy thư mục /dir sang /tmp:", a: "d", options: { a: "cp –r /dir /tmp", b: "cp –a /dir /tmp", c: "cp --parents", d: "Tất cả đều đúng (ý nói a và b)" } },
-            { id: 98, q: "98. Chương trình kiểm tra DNS:", a: "c", options: { a: "dnscheck", b: "BIND", c: "nslookup", d: "resolve" } },
-            { id: 99, q: "99. Trong httpd.conf khai báo nào có vẻ SAI/Lạ nhất?", a: "d", options: { a: "Alias /image/ ...", b: "DocumentRoot ...", c: "ServerRoot ...", d: "DirectoryIndex index.cgi (khi chưa config cgi)" } },
-            { id: 100, q: "100. Xóa toàn bộ thư mục /dir (có chứa file):", a: "b", options: { a: "rm –f /dir", b: "rm –r /dir", c: "rmdir /dir", d: "rmdir –p" } },
-            { id: 101, q: "101. Tìm sự khác nhau giữa 2 tập tin:", a: "f", options: { a: "cmp", f: "diff", g: "wc", h: "Tất cả sai" } },
-            { id: 102, q: "102. Cấu trúc inode (cũ) bao gồm bao nhiêu con trỏ?", a: "b", options: { a: "10", b: "13 (hoặc 15)", c: "16", d: "Không câu nào đúng" } },
-            { id: 103, q: "103. Regex: Tên mở rộng KHÔNG chứa ký tự từ x đến w:", a: "b", options: { a: "ls *.!x | .!w", b: "ls *.[!x-w]", c: "ls ! *.[xz]", d: "ls *.[!xw]" } },
-            { id: 104, q: "104. Tạo user 'abc' là thành viên của nhóm 'group':", a: "a", options: { a: "useradd –g group abc", b: "useradd –G", c: "useradd –m", d: "useradd group abc" } },
-            { id: 105, q: "105. Ít nhất bao nhiêu partition để cài Linux (chuẩn chung)?", a: "b", options: { a: "1", b: "2 (/ và swap)", c: "Lớn hơn 2", d: "4" } },
-            { id: 106, q: "106. File chứa biến môi trường Bash Shell:", a: "c", options: { a: "~/.profile", b: "/bash", c: "/etc/profile", d: "~/bash" } },
-            { id: 107, q: "107. Trật tự trường trong /etc/group:", a: "a", options: { a: "groupname, password, GID, member list", b: "GID...", c: "groupname, GID...", d: "GID..." } },
-            { id: 108, q: "108. User mới tạo không login được, nguyên nhân phổ biến:", a: "a", options: { a: "Chưa đặt mật khẩu", b: "Chưa có home", c: "Chưa có shell", d: "Tên ngắn" } },
-            { id: 109, q: "109. Sửa thủ công /etc/passwd nhưng không login được:", a: "c", options: { a: "Trùng UID", b: "Thiếu ngoặc kép", c: "Mật khẩu phải mã hóa (dùng lệnh passwd)", d: "Tên ngắn" } },
-            { id: 110, q: "110. Trật tự đúng của /etc/passwd:", a: "b", options: { a: "username, UID, GID, home, command, comment", b: "username, UID, GID, comment, home, command(shell)", c: "UID...", d: "username..." } },
-            { id: 111, q: "111. Máy có Win98, muốn cài Linux nhưng hết chỗ:", a: "b", options: { a: "Dùng Disk Manager", b: "Phân hoạch lại, cài Win rồi cài Linux", c: "Không thể cài", d: "Cài vào thư mục Win" } },
-            { id: 112, q: "112. Không thể tạo partition thứ 5:", a: "c", options: { a: "Ổ cứng đầy", b: "Thiếu swap", c: "Đã tạo 4 primary partitions (giới hạn MBR)", d: "Linux cấm" } },
-            { id: 113, q: "113. Ký tự 'x' trong trường password của /etc/passwd:", a: "b", options: { a: "Đã mã hóa", b: "Đang sử dụng shadow password", c: "Rỗng", d: "Hết hạn" } },
-            { id: 114, q: "114. Lệnh xóa user và xóa luôn home directory:", a: "d", options: { a: "userdel –m", b: "userdel –u", c: "userdel –l", d: "userdel –r" } },
-            { id: 115, q: "115. Root reset mật khẩu cho user 'sapa':", a: "d", options: { a: "passwd Dung", b: "resetpassw", c: "su sapa", d: "passwd sapa" } },
-            { id: 116, q: "116. File xác định tất cả user:", a: "a", options: { a: "/etc/passwd", b: "/etc/users", c: "/etc/password", d: "/etc/user.conf" } },
-            { id: 117, q: "117. Username nào KHÔNG hợp lệ:", a: "a", options: { a: "Theresa Hadden (có dấu cách)", b: "thadden", c: "TheresaH", d: "T.H." } },
-            { id: 118, q: "118. Dung lượng swap nhỏ nhất cho phép (lý thuyết cũ):", a: "a", options: { a: "16 MB", b: "64 MB", c: "128 MB", d: "256 MB" } },
-            { id: 119, q: "119. 2 ổ IDE, mỗi ổ 2 partition. Tên là:", a: "b", options: { a: "hda1... hda4", b: "hda1, hda2 (ổ 1) và hdb1, hdb2 (ổ 2)", c: "sda...", d: "sda..." } },
-            { 
-                id: 120, 
-                q: "120. Hãy cho biết chương trình sau đây xuất ra nội dung nào đúng (Xem hình ảnh):", 
-                a: "a", 
-                image: "cau120.png",
-                options: { a: "", b: "", c: "", d: "" } 
-            }
-        ];
+<script>
+const quizData = [
+{q:"Phần quan trọng nhất của Linux?",a:"c",o:["File System","Services","Kernel","Shell"]},
+{q:"Số phiên bản kernel Linux cũ?",a:"d",o:["Số chẵn ổn định","Số lẻ thử nghiệm","Không quan trọng","A và B đúng"]},
+{q:"Cài RedHat ở chế độ nào xóa DOS?",a:"b",o:["Workstation","Server","Cả hai","Không đúng"]},
+{q:"Kiến trúc Kernel Linux?",a:"d",o:["Static","Microkernel","Distributed","Monolithic"]},
+{q:"Tác giả Linux?",a:"b",o:["Bill Gates","Linus Torvalds","Alan Turing","Pascal"]},
+{q:"Liệt kê file?",a:"a",o:["ls","df","du","cp"]},
+{q:"Chi tiết file?",a:"b",o:["-a","-l","-x","-n"]},
+{q:"File ẩn?",a:"b",o:["-b","-a","-l","-n"]},
+{q:"Đổi thư mục?",a:"b",o:["cdir","cd","mkdir","dir"]},
+{q:"Về home nhanh?",a:"a",o:["cd","cd /home/user","cd / ; cd home","cd sinhvien"]},
+{q:"Xem file văn bản?",a:"d",o:["cat","less","more","Tất cả"]},
+{q:"Mount CD?",a:"a",o:["Phải mount","eject","cd /mnt","Không đọc"]},
+{q:"File mount mặc định?",a:"c",o:["/etc/mtab","/etc/mount.conf","/etc/fstab","/etc/modules.conf"]},
+{q:"File mount hiện tại?",a:"a",o:["/etc/mtab","/etc/fstab","/etc/group","/etc/init"]},
+{q:"Quyền -rwx--x--x?",a:"d",o:["077","644","755","711"]},
+{q:"Runlevel shutdown?",a:"b",o:["6","0","3","5"]},
+{q:"Runlevel reboot?",a:"a",o:["6","0","3","5"]},
+{q:"Runlevel đồ họa?",a:"d",o:["6","0","3","5"]},
+{q:"Editor dòng lệnh phổ biến?",a:"a",o:["vi","Word","Emacs","Nano"]},
+{q:"Xem tiến trình?",a:"b",o:["ls","ps","cs","ds"]},
+{q:"PID là?",a:"a",o:["Process ID","User ID","Group ID","GUID"]},
+{q:"Kill tiến trình?",a:"b",o:["stop","kill","halt","shutdown"]},
+{q:"Cổng HTTP?",a:"b",o:["21","80","110","443"]},
+{q:"Cổng SMTP?",a:"d",o:["22","23","24","25"]},
+{q:"Login từ xa?",a:"d",o:["telnet","ssh","rlogin","Tất cả"]},
+{q:"Cài rpm?",a:"b",o:["rpm -evh","rpm -ivh","rpm -q","rpm -qa"]},
+{q:"Runlevel mặc định?",a:"c",o:["/etc/grub.conf","/etc/runlevel","/etc/inittab","/etc/init"]},
+{q:"Xem hướng dẫn ls?",a:"c",o:["help ls","doc ls","man ls","info ls"]},
+{q:"Xem dung lượng đĩa?",a:"c",o:["du","du -a","df","lsblk"]},
+{q:"File user?",a:"a",o:["/etc/passwd","/etc/users","/etc/shadow","/etc/login"]},
+{q:"User cao nhất?",a:"b",o:["admin","root","sudo","user"]},
+{q:"2 ổ IDE mỗi ổ 2 partition?",a:"b",o:["sda1,sda2","hda1,hda2,hdb1,hdb2","sda...","Không đúng"]},
+{q:"Kết quả chương trình shell?",a:"a",o:["Xem hình","B","C","D"],img:"cau120.png"}
+];
 
-        function renderQuiz() {
-            const quizContainer = document.getElementById('quiz-content');
-            let html = '';
-            
-            // Các nhãn cố định
-            const fixedLabels = ['A', 'B', 'C', 'D'];
+function render(){
+    let html="";
+    quizData.forEach((q,i)=>{
+        html+=`<div class="question-item">
+        <div class="question-title">Câu ${i+1}: ${q.q}</div>`;
+        if(q.img) html+=`<img src="${q.img}">`;
+        q.o.forEach((op,j)=>{
+            html+=`<label id="l-${i}-${j}">
+            <input type="radio" name="q${i}" value="${j}"> ${"ABCD"[j]}. ${op}
+            </label>`;
+        });
+        html+="</div>";
+    });
+    document.getElementById("quiz").innerHTML=html;
+}
 
-            quizData.forEach((item, index) => {
-                let imageBlock = '';
-                if (item.image) {
-                    imageBlock = `<img src="${item.image}" class="question-image" alt="Hình minh họa câu ${item.id}">`;
-                }
-
-                // 1. Lấy danh sách key (a, b, c, d)
-                let optionKeys = Object.keys(item.options);
-                
-                // 2. Trộn ngẫu nhiên
-                optionKeys.sort(() => Math.random() - 0.5);
-
-                // 3. (MỚI) Xử lý riêng cho Câu 2 để đáp án D luôn đúng logic
-                // Tạo một bản sao để sửa nội dung hiển thị mà không làm hỏng dữ liệu gốc
-                let displayOptions = { ...item.options };
-
-                if (item.id === 2 && displayOptions['d'].includes("Câu a và b đúng")) {
-                    // Tìm xem câu 'a' và 'b' gốc đang nằm ở vị trí nào (A, B, C hay D)
-                    let labelA, labelB;
-                    
-                    optionKeys.forEach((key, i) => {
-                        if (key === 'a') labelA = fixedLabels[i];
-                        if (key === 'b') labelB = fixedLabels[i];
-                    });
-
-                    // Sắp xếp lại cho đẹp (Ví dụ: "Câu A và C đúng" thay vì "C và A")
-                    let labels = [labelA, labelB].sort();
-                    
-                    // Cập nhật nội dung hiển thị cho câu D
-                    displayOptions['d'] = `Câu ${labels[0]} và ${labels[1]} đúng`;
-                }
-
-                // 4. Tạo HTML
-                let optionsHtml = optionKeys.map((key, i) => {
-                    return `
-                        <label id="lbl-${index}-${key}" style="display: flex; align-items: center;">
-                            <input type="radio" name="q${index}" value="${key}" style="margin-right: 10px;"> 
-                            <span><strong>${fixedLabels[i]}.</strong> ${displayOptions[key]}</span>
-                        </label>
-                    `;
-                }).join('');
-
-                html += `
-                    <div class="question-item" id="question-${index}">
-                        <div class="question-title">Câu ${item.id}: ${item.q.replace(/^\d+\.\s/, '')}</div>
-                        ${imageBlock}
-                        <div class="options" style="display: flex; flex-direction: column; gap: 10px;">
-                            ${optionsHtml}
-                        </div>
-                    </div>
-                `;
-            });
-
-            quizContainer.innerHTML = html;
+function submitQuiz(){
+    let score=0;
+    quizData.forEach((q,i)=>{
+        const sel=document.querySelector(`input[name="q${i}"]:checked`);
+        if(sel){
+            if("abcd"[sel.value]===q.a) score++;
+            else document.getElementById(`l-${i}-${sel.value}`).classList.add("wrong-answer");
         }
+        const correctIndex="abcd".indexOf(q.a);
+        document.getElementById(`l-${i}-${correctIndex}`).classList.add("correct-answer");
+    });
+    const r=document.getElementById("result-area");
+    r.style.display="block";
+    r.innerHTML=`Bạn làm đúng ${score}/${quizData.length} câu`;
+}
 
-        function submitQuiz() {
-            let score = 0;
-            let unswered = 0;
-            
-            quizData.forEach((item, index) => {
-                const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
-                
-                // Reset style cũ
-                Object.keys(item.options).forEach(key => {
-                    document.getElementById(`lbl-${index}-${key}`).classList.remove('correct-answer', 'wrong-answer');
-                });
+render();
+</script>
 
-                // Luôn hiển thị đáp án đúng
-                const correctLabel = document.getElementById(`lbl-${index}-${item.a}`);
-                if (correctLabel) correctLabel.classList.add('correct-answer');
-                
-                // Kiểm tra đáp án
-                if (selectedOption) {
-                    if (selectedOption.value === item.a) {
-                        score++;
-                    } else {
-                        const wrongLabel = document.getElementById(`lbl-${index}-${selectedOption.value}`);
-                        wrongLabel.classList.add('wrong-answer');
-                    }
-                } else {
-                    unswered++;
-                }
-            });
-
-            // Hiển thị kết quả
-            const resultArea = document.getElementById('result-area');
-            resultArea.style.display = 'block';
-            resultArea.innerHTML = `
-                Kết quả: <span style="color: #27ae60">${score}</span> / ${quizData.length} câu đúng.<br>
-                <span style="font-size: 0.8em; color: #7f8c8d">(Bỏ trống: ${unswered} câu)</span>
-            `;
-            
-            // Cuộn xuống phần kết quả
-            resultArea.scrollIntoView({ behavior: 'smooth' });
-            
-            // Thông báo
-            alert(`Bạn đã làm đúng ${score}/${quizData.length} câu!`);
-        }
-
-        // Khởi chạy khi load trang
-        window.onload = renderQuiz;
-    </script>
 </body>
 </html>
